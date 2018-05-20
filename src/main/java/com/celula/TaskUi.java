@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -121,7 +122,7 @@ public class TaskUi extends JFrame {
 		JPanel panel_2 = new JPanel();
 		contentPane.add(panel_2, BorderLayout.SOUTH);
 
-		JButton btnNewButton = new JButton("New button");
+		JButton btnNewButton = new JButton("copy");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -147,6 +148,10 @@ public class TaskUi extends JFrame {
 			}
 		});
 		panel_2.add(btnNewButton);
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		int x = (int)(toolkit.getScreenSize().getWidth()-this.getWidth())/2;
+		int y = (int)(toolkit.getScreenSize().getHeight()-this.getHeight())/2;
+		this.setLocation(x, y);
 	}
 
 	public TaskUi(BackupToolGui parent) {
@@ -161,7 +166,25 @@ public class TaskUi extends JFrame {
 			rsessionInstance.source(new File("src\\main\\resources\\DataBackUtil.R"));
 			rsessionInstance.set("src_path", this.src_dir_txt.getText());
 
-			REXP eval = rsessionInstance.eval("dl<-data_list(src_path)");
+			String max_size_str = this.parent.max_size_text.getText();
+			rsessionInstance.eval("arg_list<-list('src_dir' = src_path)");
+			if(!max_size_str.isEmpty()){
+				double max_size = Double.parseDouble(max_size_str);
+				rsessionInstance.set("max_size", max_size);
+				rsessionInstance.eval("arg_list['max.size']=max_size");
+			}
+			String max_date_str = this.parent.max_date_text.getText();
+			if(!max_date_str.isEmpty()){
+				rsessionInstance.set("max_date", max_date_str);
+				rsessionInstance.eval("arg_list['max.date']=max_date");
+			}
+			String filter_str = this.parent.filter_text.getText();
+			if(!filter_str.isEmpty()){
+				rsessionInstance.set("filter_str", filter_str);
+				rsessionInstance.eval("arg_list['filt_str']=filter_str");
+			}
+			rsessionInstance.eval("dl<-data.frame()");
+			REXP eval = rsessionInstance.eval("dl<-do.call('data_list',arg_list)");
 			rsessionInstance.eval("cat(as.character(dl$basedir))");
 			
 			table = new JTable();

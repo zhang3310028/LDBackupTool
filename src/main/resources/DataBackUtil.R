@@ -63,6 +63,7 @@ dir_size<-function(dir_path=c(".")){
 		total_size <-Reduce("+",all_file_size);
 		total_size
 	})
+	total_size[total_size%in%NA] <- 0
 	total_size
 }
 

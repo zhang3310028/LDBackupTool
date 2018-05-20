@@ -1,18 +1,31 @@
 package ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.FlowLayout;
+import java.awt.Panel;
 
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JTable;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
+
+import com.jgoodies.forms.factories.DefaultComponentFactory;
+import javax.swing.border.TitledBorder;
 
 public class JTableTest extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
+	private JLabel lblNewJgoodiesTitle;
+	private JPanel panel;
+	private JButton btnNewButton;
 
 	/**
 	 * Launch the application.
@@ -47,6 +60,16 @@ public class JTableTest extends JFrame {
 		
 		table = new JTable();
 		scrollPane.setViewportView(table);
+		
+		lblNewJgoodiesTitle = DefaultComponentFactory.getInstance().createTitle("New JGoodies title");
+		scrollPane.setColumnHeaderView(lblNewJgoodiesTitle);
+		
+		panel = new JPanel();
+		panel.setBorder(new TitledBorder(null, "Title", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		contentPane.add(panel, BorderLayout.NORTH);
+		
+		btnNewButton = new JButton("New button");
+		panel.add(btnNewButton);
 	}
 
 }

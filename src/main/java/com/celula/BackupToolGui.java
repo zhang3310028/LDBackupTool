@@ -1,12 +1,12 @@
 package com.celula;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,24 +14,21 @@ import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import java.awt.FlowLayout;
-import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
+import javax.swing.border.TitledBorder;
 
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.Dimension;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
+import com.jgoodies.forms.layout.ColumnSpec;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.forms.layout.FormSpecs;
+import com.jgoodies.forms.layout.RowSpec;
 
 public class BackupToolGui {
 
 	private JFrame frame;
 	public JTextField src_path_txt;
 	public JTextField dest_path_txt;
-	public JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
+	public JTextField max_date_text;
+	public JTextField max_size_text;
+	public JTextField filter_text;
 
 	/**
 	 * Launch the application.
@@ -61,87 +58,46 @@ public class BackupToolGui {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 558, 431);
+		frame.setBounds(100, 100, 417, 249);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		int x = (int)(toolkit.getScreenSize().getWidth()-frame.getWidth())/2;
+		int y = (int)(toolkit.getScreenSize().getHeight()-frame.getHeight())/2;
+		frame.setLocation(x, y);
 		
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JPanel path_panel = new JPanel();
+		path_panel.setBounds(new Rectangle(20, 20, 8, 4));
+		path_panel.setBorder(new TitledBorder(null, "\u8DEF\u5F84\u8BBE\u7F6E", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		path_panel.setSize(new Dimension(6, 10));
-		path_panel.setPreferredSize(new Dimension(10, 30));
 		frame.getContentPane().add(path_panel, BorderLayout.CENTER);
-		GridBagLayout gbl_path_panel = new GridBagLayout();
-		gbl_path_panel.columnWidths = new int[]{143, 54, 66, 54, 66, 0};
-		gbl_path_panel.rowHeights = new int[]{0, 0, 21, 0};
-		gbl_path_panel.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gbl_path_panel.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-		path_panel.setLayout(gbl_path_panel);
+		path_panel.setLayout(new FormLayout(new ColumnSpec[] {
+				FormSpecs.DEFAULT_COLSPEC,
+				FormSpecs.RELATED_GAP_COLSPEC,
+				ColumnSpec.decode("263px"),},
+			new RowSpec[] {
+				RowSpec.decode("22px"),
+				RowSpec.decode("24px"),}));
 		
 		JLabel lblSrcPath = new JLabel("src path:");
-		GridBagConstraints gbc_lblSrcPath = new GridBagConstraints();
-		gbc_lblSrcPath.anchor = GridBagConstraints.WEST;
-		gbc_lblSrcPath.insets = new Insets(0, 0, 5, 5);
-		gbc_lblSrcPath.gridx = 1;
-		gbc_lblSrcPath.gridy = 1;
-		path_panel.add(lblSrcPath, gbc_lblSrcPath);
+		path_panel.add(lblSrcPath, "1, 1, left, center");
 		
 		src_path_txt = new JTextField();
+		src_path_txt.setPreferredSize(new Dimension(30, 20));
 		src_path_txt.setText("d:/tmp");
-		GridBagConstraints gbc_src_path_txt = new GridBagConstraints();
-		gbc_src_path_txt.fill = GridBagConstraints.BOTH;
-		gbc_src_path_txt.gridwidth = 3;
-		gbc_src_path_txt.insets = new Insets(0, 0, 5, 5);
-		gbc_src_path_txt.gridx = 2;
-		gbc_src_path_txt.gridy = 1;
-		path_panel.add(src_path_txt, gbc_src_path_txt);
+		path_panel.add(src_path_txt, "3, 1, fill, default");
 		src_path_txt.setColumns(10);
 		
 		JLabel dest_path_label = new JLabel("dest path");
-		GridBagConstraints gbc_dest_path_label = new GridBagConstraints();
-		gbc_dest_path_label.anchor = GridBagConstraints.WEST;
-		gbc_dest_path_label.insets = new Insets(0, 0, 0, 5);
-		gbc_dest_path_label.gridx = 1;
-		gbc_dest_path_label.gridy = 2;
-		path_panel.add(dest_path_label, gbc_dest_path_label);
+		path_panel.add(dest_path_label, "1, 2, left, center");
 		
 		dest_path_txt = new JTextField();
 		dest_path_txt.setText("d:/test");
-		GridBagConstraints gbc_dest_path_txt = new GridBagConstraints();
-		gbc_dest_path_txt.fill = GridBagConstraints.HORIZONTAL;
-		gbc_dest_path_txt.gridwidth = 3;
-		gbc_dest_path_txt.insets = new Insets(0, 0, 0, 5);
-		gbc_dest_path_txt.anchor = GridBagConstraints.NORTH;
-		gbc_dest_path_txt.gridx = 2;
-		gbc_dest_path_txt.gridy = 2;
-		path_panel.add(dest_path_txt, gbc_dest_path_txt);
+		path_panel.add(dest_path_txt, "3, 2, fill, default");
 		dest_path_txt.setColumns(10);
-		
-		JPanel search_panel = new JPanel();
-		search_panel.setPreferredSize(new Dimension(10, 70));
-		frame.getContentPane().add(search_panel, BorderLayout.NORTH);
-		
-		JLabel max_date_label = new JLabel("maxDate:");
-		search_panel.add(max_date_label);
-		
-		textField = new JTextField();
-		textField.setColumns(10);
-		search_panel.add(textField);
-		
-		JLabel label_1 = new JLabel("filter:");
-		search_panel.add(label_1);
-		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		search_panel.add(textField_1);
-		
-		JLabel lblNewLabel = new JLabel("maxSize:");
-		search_panel.add(lblNewLabel);
-		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		search_panel.add(textField_2);
 		
 		JPanel button_panel = new JPanel();
 		frame.getContentPane().add(button_panel, BorderLayout.SOUTH);
@@ -154,6 +110,72 @@ public class BackupToolGui {
 			}
 		});
 		button_panel.add(search_button);
+		
+		JPanel panel = new JPanel();
+		frame.getContentPane().add(panel, BorderLayout.NORTH);
+		panel.setLayout(new BorderLayout(0, 0));
+		
+		JPanel search_panel = new JPanel();
+		panel.add(search_panel);
+		search_panel.setBorder(new TitledBorder(null, "\u6761\u4EF6", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		search_panel.setPreferredSize(new Dimension(17, 75));
+		search_panel.setLayout(new FormLayout(new ColumnSpec[] {
+				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+				ColumnSpec.decode("66px"),
+				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+				ColumnSpec.decode("84px"),
+				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+				ColumnSpec.decode("65px"),
+				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
+				ColumnSpec.decode("84px"),},
+			new RowSpec[] {
+				RowSpec.decode("22px"),
+				RowSpec.decode("21px"),}));
+		
+		JLabel max_date_label = new JLabel("maxDate:");
+		search_panel.add(max_date_label, "2, 1, left, center");
+		
+		max_date_text = new JTextField();
+		max_date_text.setColumns(10);
+		search_panel.add(max_date_text, "4, 1, fill, top");
+		
+		JLabel lblNewLabel = new JLabel("maxSize:");
+		search_panel.add(lblNewLabel, "6, 1, left, center");
+		
+		max_size_text = new JTextField();
+		max_size_text.setColumns(10);
+		search_panel.add(max_size_text, "8, 1, fill, top");
+		
+		JLabel label_1 = new JLabel("filter:");
+		search_panel.add(label_1, "2, 2, left, center");
+		
+		filter_text = new JTextField();
+		filter_text.setColumns(10);
+		search_panel.add(filter_text, "4, 2, 5, 1, fill, top");
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setPreferredSize(new Dimension(30, 10));
+		panel.add(panel_1, BorderLayout.WEST);
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setPreferredSize(new Dimension(30, 10));
+		panel.add(panel_2, BorderLayout.EAST);
+		
+		JPanel panel_5 = new JPanel();
+		panel_5.setPreferredSize(new Dimension(10, 20));
+		panel.add(panel_5, BorderLayout.NORTH);
+		
+		JLabel label = new JLabel("数据备份");
+		panel_5.add(label);
+		
+		JPanel panel_3 = new JPanel();
+		panel_3.setPreferredSize(new Dimension(30, 10));
+		frame.getContentPane().add(panel_3, BorderLayout.WEST);
+		
+		JPanel panel_4 = new JPanel();
+		panel_4.setPreferredSize(new Dimension(30, 10));
+		panel_4.setMinimumSize(new Dimension(30, 10));
+		frame.getContentPane().add(panel_4, BorderLayout.EAST);
 	}
 
 }
