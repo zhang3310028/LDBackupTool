@@ -184,6 +184,7 @@ public class TaskUi extends JFrame {
 				rsessionInstance.eval("arg_list['filt_str']=filter_str");
 			}
 			rsessionInstance.eval("dl<-data.frame()");
+			rsessionInstance.eval("options(scipen=200)");
 			REXP eval = rsessionInstance.eval("dl<-do.call('data_list',arg_list)");
 			rsessionInstance.eval("cat(as.character(dl$basedir))");
 			
@@ -209,7 +210,7 @@ public class TaskUi extends JFrame {
 		String[] dir_list = rsessionInstance.eval("dl$absdir").asStrings();
 		String[] basedir_list = rsessionInstance.eval("dl$basedir").asStrings();
 		String[] mtime_list = rsessionInstance.eval("as.character(dl$mtime)").asStrings();
-		String[] acc_size_list = rsessionInstance.eval("as.character(dl$acc_size)").asStrings();
+		String[] acc_size_list = rsessionInstance.eval("as.character(dl$acc_size/(1024*1024*1024))").asStrings();
 		
 		List<String> columns = new ArrayList<String>();
         List<String[]> values = new ArrayList<String[]>();
@@ -217,7 +218,7 @@ public class TaskUi extends JFrame {
         columns.add("dir");
         columns.add("basedir");
         columns.add("time");
-        columns.add("acc_size");
+        columns.add("acc_size(G)");
         for (int i = 0; i < dir_list.length; i++) {
         	values.add(new String[] {rownum_list[i],dir_list[i],basedir_list[i],mtime_list[i],acc_size_list[i]});
         }

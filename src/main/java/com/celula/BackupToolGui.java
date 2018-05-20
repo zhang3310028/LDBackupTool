@@ -125,7 +125,7 @@ public class BackupToolGui {
 				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
 				ColumnSpec.decode("84px"),
 				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
-				ColumnSpec.decode("65px"),
+				ColumnSpec.decode("75px"),
 				FormSpecs.LABEL_COMPONENT_GAP_COLSPEC,
 				ColumnSpec.decode("84px"),},
 			new RowSpec[] {
@@ -139,7 +139,7 @@ public class BackupToolGui {
 		max_date_text.setColumns(10);
 		search_panel.add(max_date_text, "4, 1, fill, top");
 		
-		JLabel lblNewLabel = new JLabel("maxSize:");
+		JLabel lblNewLabel = new JLabel("maxSize(T):");
 		search_panel.add(lblNewLabel, "6, 1, left, center");
 		
 		max_size_text = new JTextField();
