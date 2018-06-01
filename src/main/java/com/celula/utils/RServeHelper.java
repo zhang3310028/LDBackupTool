@@ -1,24 +1,16 @@
 package com.celula.utils;
-import java.awt.BorderLayout;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.math.R.RserverConf;
 import org.math.R.Rsession;
-import org.rosuda.REngine.REXP;
-import org.rosuda.REngine.REXPMismatchException;
 
 public class RServeHelper {
 
+	private static Logger logger = LogManager.getLogger(RServeHelper.class.getName());
     private static Rsession rsession=null;
 
     /**
@@ -36,7 +28,9 @@ public class RServeHelper {
         String username = props.getProperty("username");
         String password = props.getProperty("password");
         RserverConf rconf=new RserverConf(hostname,6311,username,password,new Properties());
-        rsession = Rsession.newInstanceTry(System.out, rconf);
+        
+        //rsession = Rsession.newLocalInstance(System.out,null);
+        rsession = Rsession.newRemoteInstance(System.out, rconf);
         return rsession;
     }
 
@@ -53,5 +47,12 @@ public class RServeHelper {
     }
     
     public static void main(String[] args) {
+    	try {
+			Rsession rsessionInstance = RServeHelper.getRsessionInstance();
+		} catch (IOException e) {
+			logger.debug("log");
+			e.printStackTrace();
+		}
+    	
 	}
 }

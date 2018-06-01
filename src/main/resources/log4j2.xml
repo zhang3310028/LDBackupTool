@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration status="OFF">
+	<Properties>
+	<Property name="log-path">logs</Property>
+	<Property name="archive">${log-path}/archive</Property>
+    </Properties>
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss.SSS} %location] %-5level: %msg%n"/>
+        </Console>
+        <File name="File_Appender" fileName="${log-path}/xmlfilelog.log">
+        		<PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss.SSS} %location] %-5level: %msg%n"/>
+        </File>
+    </appenders>
+    <loggers>
+        <logger name="com.celula" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="File_Appender"/>
+        </logger>
+        <root level="error">
+            <appender-ref ref="File_Appender"/>
+        </root>
+    </loggers>
+</configuration>

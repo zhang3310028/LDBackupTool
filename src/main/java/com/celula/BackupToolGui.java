@@ -165,7 +165,7 @@ public class BackupToolGui {
 		panel_5.setPreferredSize(new Dimension(10, 20));
 		panel.add(panel_5, BorderLayout.NORTH);
 		
-		JLabel label = new JLabel("数据备份");
+		JLabel label = new JLabel("\u6570\u636E\u5907\u4EFD");
 		panel_5.add(label);
 		
 		JPanel panel_3 = new JPanel();

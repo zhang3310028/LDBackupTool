@@ -9,8 +9,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +33,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.math.R.Rsession;
 import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.REXPMismatchException;
@@ -34,7 +42,8 @@ import org.rosuda.REngine.REXPMismatchException;
 import com.celula.utils.RServeHelper;
 
 public class TaskUi extends JFrame {
-
+	
+	private static Logger logger = LogManager.getLogger(RServeHelper.class.getName());
 	private BackupToolGui parent;
 
 	private JPanel contentPane;
@@ -143,6 +152,7 @@ public class TaskUi extends JFrame {
 				try {
 					listData(table,rsessionInstance);
 				} catch (REXPMismatchException e1) {
+					logger.error("",e1);
 					e1.printStackTrace();
 				}
 			}
@@ -163,7 +173,21 @@ public class TaskUi extends JFrame {
 
 		try {
 			rsessionInstance = RServeHelper.getRsessionInstance();
-			rsessionInstance.source(new File("src\\main\\resources\\DataBackUtil.R"));
+			InputStream resourceAsStream = TaskUi.class.getClassLoader().getResourceAsStream("DataBackUtil.R");
+			File config_file = new File("DataBackUtil.R");
+			System.out.println(resourceAsStream.available());
+			if(true){
+				BufferedInputStream bufferedInputStream = new BufferedInputStream(resourceAsStream);
+				BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(bufferedInputStream));
+				PrintWriter printWriter = new PrintWriter(config_file);
+				String resultString = "";
+				while((resultString = bufferedReader.readLine())!= null){
+					printWriter.println(resultString);
+				}
+				printWriter.close();
+			}
+			
+			rsessionInstance.source(config_file);
 			rsessionInstance.set("src_path", this.src_dir_txt.getText());
 
 			String max_size_str = this.parent.max_size_text.getText();
@@ -196,9 +220,8 @@ public class TaskUi extends JFrame {
 			table_panel.setVisible(true);
 			table_panel.setSize(200, 200);
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (REXPMismatchException e) {
+		} catch (Exception e) {
+			logger.error("",e);
 			e.printStackTrace();
 		}
 
