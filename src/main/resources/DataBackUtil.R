@@ -12,9 +12,6 @@ data_list<-function(src_dir=".",max.size=NA,max.date=Sys.time(),filt_str=c()){
 		list.dirs(xx,full.names=T,recursive=F)
 	})
 	files<-unlist(file_lists);
-	sapply(filt_str,function(xx){
-		files<<-files[!grepl(xx,files,perl=T)]
-	})
 
 	result<-lapply(files,function(xx){
 		list(
@@ -24,6 +21,9 @@ data_list<-function(src_dir=".",max.size=NA,max.date=Sys.time(),filt_str=c()){
 	})
 	dat<-do.call(rbind,lapply(result,data.frame))
 	dat<-dat[order(dat$mtime),,drop=F]
+	sapply(filt_str,function(xx){
+		dat<<-dat[!grepl(xx,dat$basedir,perl=T),]
+	})
 #----------prepare dat end
 
 #---------- mtime filter start
