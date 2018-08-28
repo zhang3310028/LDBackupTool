@@ -148,7 +148,7 @@ public class TaskUi extends JFrame {
 				rsessionInstance.eval("cat(as.character(dl$absdir[list_index]))");
 				rsessionInstance.eval("a<-copy_files(dest_dir,dl$absdir[list_index])");
 				rsessionInstance.eval("cat(1:nrow(dl)%in%list_index)");
-				rsessionInstance.eval("dl<-dl[!1:nrow(dl)%in%list_index,]");
+				REXP eval = rsessionInstance.eval("dl<-do.call('data_list',arg_list)");
 				try {
 					listData(table,rsessionInstance);
 				} catch (REXPMismatchException e1) {
