@@ -7,7 +7,9 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
 
+import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -20,6 +22,8 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.FormSpecs;
 import com.jgoodies.forms.layout.RowSpec;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
 
 public class BackupToolGui {
 
@@ -67,6 +71,19 @@ public class BackupToolGui {
 		
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
+		
+		JMenu mnOptions = new JMenu("options...");
+		menuBar.add(mnOptions);
+		
+		JMenuItem mntmOptions = new JMenuItem("preferences...");
+		mntmOptions.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				BackupToolPreference prefUi = new BackupToolPreference();
+				prefUi.frame.setVisible(true);
+			}
+		});
+		mnOptions.add(mntmOptions);
+		
 		frame.getContentPane().setLayout(new BorderLayout(0, 0));
 		
 		JPanel path_panel = new JPanel();
